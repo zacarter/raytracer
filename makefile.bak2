@@ -1,0 +1,29 @@
+CC = g++ -Wall
+UNIT_TESTS = TestVector TestSphere TestCamera
+O = Vector.o Color.o Ray.o Sphere.o Camera.o
+
+Test: $(UNIT_TESTS)
+#Driver Program
+Render: Render.cpp $(O)
+	$(CC) -framework GLUT -framework OpenGL Render.cpp -o Render $(O)
+
+Vector.o: Vector.h Vector.cpp
+	$(CC) -c Vector.cpp
+Color.o: Color.h Color.cpp
+	$(CC) -c Color.cpp
+Ray.o: Ray.h Ray.cpp
+	$(CC) -c Ray.cpp
+Camera.o: Object.h Vector.h Color.h Camera.h Camera.cpp
+	$(CC) -c Camera.cpp
+Sphere.o: Object.h Renderable.h Vector.h Color.h Ray.h Sphere.h Sphere.cpp
+	$(CC) -c Sphere.cpp
+
+TestSphere: Sphere.o Vector.o Ray.o Color.o
+	$(CC)$(CFLAGS) -D __TEST_Shere__ Sphere.o Vector.o Color.o Ray.o -o TestSphere Sphere.cpp
+TestVector: Vector.cpp
+	$(CC)$(CFLAGS) -D __TEST_Vector__ -o TestVector Vector.cpp 
+TestCamera:  Camera.o Vector.o
+	$(CC)$(CFLAGS) -D __TEST_Camera__ Camera.o Vector.o -o TestCamera
+
+clean: 
+	rm -f *.o *~ core.* *.a

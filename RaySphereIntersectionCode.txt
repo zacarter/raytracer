@@ -1,0 +1,61 @@
+//return the intersection point of a ray with a surface given the real root of the quadratic equation
+Vector getIntersection(Ray ray, float root) {
+	Vector Ri;
+	Ri.setPoint(ray.getPos().getX()+ray.getDir().getX()*root,
+			ray.getPos().getY()+ray.getDir().getY()*root,
+			ray.getPos().getZ()+ray.getDir().getZ()*root);
+	return Ri;
+}
+
+//return the unit surface normal to a sphere at intersection point Ri
+Vector surfaceNormalSphere(Sphere sphere, Vector Ri) {
+	float Sri = 1/sphere.getRadius();
+	Vector SN;
+	
+	SN.setPoint((Ri.getX()-sphere.getPos().getX())*Sri,
+			(Ri.getY()-sphere.getPos().getY())*Sri,
+			(Ri.getZ()-sphere.getPos().getZ())*Sri);
+	return SN;;
+}
+
+//return the unit vector of v
+Vector normalize(Vector v){
+	Vector vp;
+	float normFactir = 1/norm(v);
+	vp.setPoint(v.getX()*normFactor,v.getY()*normFactor,v.getZ*normFactor);
+	return vp;
+}
+
+//return the norm of the vector v
+float norm(Vector v){
+	return sqrt(pow(v.getX(),2)+pow(v.getY(),2)+pow(v.getZ(),2));
+}
+
+//solve a*t^2+b*t+c=0 for t
+//normalize |Rd| = 1 so a = 1
+//return the smallest positive real root if there is an intersection
+//otherwise return -1
+float solveQuadratic(float a, float b, float c) {
+	float t1; //first root
+	float t2; //second root
+	float discrim = pow(b,2)-(4*a*c);
+	
+	if (discrim < 0.0) {
+		return -1;
+	}
+
+	t1 = ((-1)*b - sqrt(discrim))/(2*a);
+	if (t1 > 0.0) {
+		return t1;
+	}
+
+	t2 = ((-1)*b + sqrt(discrim))/(2*a);	
+	return t2;
+}
+
+Vector cross(Vector a, Vector b) {
+	Vector result((a.getY()*b.getZ())-(b.getY()*a.getZ()),
+					(a.getZ()*b.getX())-(b.getZ()*a.getX()),
+					(a.getX()*b.getY())-(b.getX()*a.getY()));
+	return result;
+}
